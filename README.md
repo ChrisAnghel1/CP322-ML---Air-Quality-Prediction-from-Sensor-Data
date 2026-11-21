@@ -28,47 +28,66 @@ regression.
   `C6H6(GT)`, `PT08.S2(NMHC)`, `PT08.S3(NOx)`, `PT08.S4(NO2)`, `PT08.S5(O3)`,
   `T`, `RH`, `AH`) missing simultaneously — a single sensor-array outage rather
   than scattered gaps, and handled separately from per-channel missingness.
-- Target column: **TBD** — candidates are `CO(GT)`, `NOx(GT)`, or `NO2(GT)`
-  (each ~17–18% missing, far more usable than `NMHC(GT)`).
+- Target column: **`CO(GT)`** (set in `src/preprocessing.py`). About 18% of its
+  raw values are missing; those rows are dropped.
+
+Full details of the cleaning steps and row counts are in
+[docs/data_pipeline.md](docs/data_pipeline.md).
+
+## Preprocessing summary
+
+`src/preprocessing.py` goes from 9,357 raw rows to 7,344 clean rows:
+
+1. Replace `-200` with `NaN`.
+2. Drop `NMHC(GT)` (about 90% missing).
+3. Drop the 366 sensor-outage rows (all `PT08` columns missing): 8,991 rows left.
+4. Drop rows with a missing `CO(GT)`: 7,344 rows left.
+5. Drop `NOx(GT)`, `NO2(GT)` and `C6H6(GT)` so they are not used as features.
+
+The output, `air_quality_clean.csv`, has the `datetime` index, the `CO(GT)` target and
+8 features (five `PT08.S*` sensors, `T`, `RH`, `AH`), with no missing values.
 
 ## Repo structure
 
 ```
 .
-├── data/
-│   └── AirQualityUCI.xlsx       # raw dataset (not committed if large / licensed)
+├── AirQualityUCI.xlsx           # raw dataset
+├── air_quality_clean.csv        # output of preprocessing.py
+├── docs/
+│   └── data_pipeline.md         # explanation of the data pipeline
 ├── src/
-│   ├── preprocessing.py         # loading, -200 handling, missing-data strategy
-│   ├── features.py              # feature engineering
-│   ├── train.py                 # model training
-│   └── evaluate.py              # metrics, feature importance
-├── notebooks/                   # exploratory analysis
-├── report/                      # final written report
+│   ├── dataset.py               # exploration: missing %, outage rows, usable rows per target
+│   └── preprocessing.py         # cleaning, writes air_quality_clean.csv
+├── requirements.txt
 └── README.md
 ```
 
-*(Adjust to match the actual layout once the code is organized.)*
+Modelling and evaluation code is not in the repo yet.
 
 ## Setup
 
 ```bash
-git clone <https://github.com/ChrisAnghel1/CP322-ML---Air-Quality-Prediction-from-Sensor-Data.git>
-cd <CP322-ML Air Quality Predictions from Sensor Data>
+git clone https://github.com/ChrisAnghel1/CP322-ML---Air-Quality-Prediction-from-Sensor-Data.git
+cd CP322-ML---Air-Quality-Prediction-from-Sensor-Data
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Suggested `requirements.txt` contents: `pandas`, `numpy`, `scikit-learn`,
-`matplotlib`, `openpyxl` (needed by pandas to read `.xlsx`).
+`requirements.txt` lists `pandas`, `numpy`, `scikit-learn`, `matplotlib` and
+`openpyxl` (needed by pandas to read `.xlsx`). The current scripts only use
+`pandas`, `numpy` and `openpyxl`.
 
 ## Usage
 
+Run both from the repo root, where `AirQualityUCI.xlsx` is:
+
 ```bash
-python src/preprocessing.py      # cleans raw data, writes processed dataset
-python src/train.py              # trains model(s)
-python src/evaluate.py           # reports metrics + feature importance
+python src/dataset.py            # prints missing-data stats
+python src/preprocessing.py      # cleans the data, writes air_quality_clean.csv
 ```
+
+`preprocessing.py` accepts an optional path to the input file as its first argument.
 
 ## Team & contributions
 
