@@ -1,0 +1,4 @@
+,RMSE,MAE,R2
+"linear regression, train",0.43,0.297,0.912
+"linear regression, val",0.686,0.452,0.794
+"mean baseline, val",1.514,1.183,-0.003
