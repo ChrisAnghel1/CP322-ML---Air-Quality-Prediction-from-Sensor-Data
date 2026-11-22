@@ -88,5 +88,3 @@ ax.set_title("Ridge coefficients as the penalty grows")
 ax.legend(fontsize=7)
 fig.tight_layout()
 fig.savefig(f"{out_dir}/ridge_coefficient_path.png", dpi=150)
-
-print(f"\nsaved metrics, coefficients and two plots to {out_dir}/")

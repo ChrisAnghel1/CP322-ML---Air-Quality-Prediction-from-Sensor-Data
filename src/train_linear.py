@@ -80,5 +80,3 @@ ax.set_ylabel("residual")
 ax.set_title("Linear regression residuals over time, validation set")
 fig.tight_layout()
 fig.savefig(f"{out_dir}/linear_residuals.png", dpi=150)
-
-print(f"\nsaved metrics, coefficients and two plots to {out_dir}/")
