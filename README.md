@@ -107,7 +107,7 @@ only (not training plus validation) and scored on the test set.
 error and bias by CO level (0–1, 1–2, 2–4 and 4+ mg/m³) and permutation feature
 importance on the test set for linear regression and the random forest.
 
-More detail on the two linear models is in
+More detail on each model and the final evaluation is in
 [docs/training_models.md](docs/training_models.md).
 
 ## Limitations
@@ -130,7 +130,7 @@ More detail on the two linear models is in
 ├── air_quality_clean.csv        # output of preprocessing.py
 ├── docs/
 │   ├── data_pipeline.md         # data loading and cleaning
-│   └── training_models.md       # linear and Ridge regression
+│   └── training_models.md       # model training and evaluation
 ├── results/                     # metrics (CSV) and figures (PNG)
 ├── src/
 │   ├── dataset.py               # exploration: missing %, outage rows, usable rows per target
